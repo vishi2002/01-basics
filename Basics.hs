@@ -802,7 +802,9 @@ error if it is ever evaluated.
 -}
 
 jn' :: Maybe (Maybe a) -> Maybe a
-jn' = undefined
+jn' (Just x) = x
+jn' Nothing = Nothing
+
 
 {-
 'Maybe' is useful for partial functions
@@ -833,7 +835,7 @@ l1 :: [Double]
 l1 = [1.0, 2.0, 3.0, 4.0]
 
 l2 :: [Int]
-l2 = undefined -- make a list of numbers
+l2 = [1, 2, 3, 4] -- make a list of numbers
 
 {-
 Lists can contain structured data...
@@ -847,7 +849,7 @@ l3 = [(1, True), (2, False)]
 -}
 
 l4 :: [[Int]]
-l4 = undefined -- make a list of lists
+l4 = [[1,2]] -- make a list of lists
 
 {-
 List elements *must* have the same type.
@@ -1058,7 +1060,7 @@ range :: Int -> Int -> [Int]
 **Step 3**: Define the function. This part is for you to do for your quiz.
 -}
 
-range i j = undefined
+range i j = if i > j then [] else i : range (i + 1) j
 
 {-
 **Step 4**: Run the tests.
@@ -1106,7 +1108,9 @@ lists that have three or more elements.
 -}
 
 isLong :: [a] -> Bool
-isLong = undefined
+isLong [_] = False
+isLong [_,_] = False
+isLong _ = True
 
 testIsLong :: Test
 testIsLong =
@@ -1266,7 +1270,8 @@ listIncr :: [Int] -> [Int]
 **Step 3**: Define the function.
 -}
 
-listIncr = undefined
+listIncr [] = []
+listIncr (x : xs) = (x + 1) : listIncr (xs)
 
 {-
 **Step 4**: Run the tests.
@@ -1300,8 +1305,8 @@ listAdd :: [Int] -> [Int] -> [Int]
 {-
 **Step 3**: Define the function.
 -}
-
-listAdd = undefined
+listAdd (x:xs) (y:ys) = (x + y) : (listAdd xs ys)
+listAdd (_) (_) = []
 
 {-
 **Step 4**: Run the tests.
@@ -1353,6 +1358,12 @@ numbers. For example, we can define a simple incrementing series.
 allNums :: [Int]
 allNums = 1 : listIncr allNums
 
+allNumsTests :: Test
+allNumsTests =
+       take 3 allNums ~?= 1 : 2 : 3 : []
+
+runANTests :: IO Counts
+runANTests = runTestTT allNumsTests
 -- >>> take 17 allNums
 -- [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
 
